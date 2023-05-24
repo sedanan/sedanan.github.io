@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111" />
+
+
+
+  
+  <title>CodePen - Animated Watch</title>
+    <link rel="canonical" href="https://codepen.io/sr123/pen/LYBVgJO" />
+  
+  
+  
+  
+<style>
+:root {
+  --deep-red: #7b0828;
+  --white: #f0f0c9;
+  --black: #0f0e0e;
+  --yellow: yellow;
+}
+
+body {
+  background-color: var(--deep-red);
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.minute_marker {
+  fill: transparent;
+  stroke: var(--black);
+  stroke-width: 7;
+  stroke-dasharray: 0.2 0.8;
+  stroke-dashoffset: 0.1;
+}
+
+.hour_marker {
+  fill: transparent;
+  stroke: var(--white);
+  stroke-width: 7;
+  stroke-dasharray: 0.2 4.8;
+  stroke-dashoffset: 0.1;
+}
+
+.hand {
+  stroke: var(--white);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.hand--thick {
+  stroke-width: 7;
+}
+
+.hand--second {
+  stroke: var(--yellow);
+}
+
+.center {
+  fill: var(--deep-red);
+  stroke: var(--white);
+  stroke-width: 2;
+}
+
+.text {
+  fill: var(--white);
+  font-family: "Arial", sans-serif;
+  text-anchor: middle;
+  cursor: pointer;
+  user-select: none;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+</head>
+
+<body translate="no">
+  <svg width="200" height="200" viewbox="-100 -100 200 200">
+
+  <circle class="minute_marker" cx="0" cy="0" r="90" pathLength="60" />
+
+  <circle class="hour_marker" cx="0" cy="0" r="90" pathLength="60" />
+
+  <text id="text" class="text" x="45" y="5">00</text>
+
+  <g id="hour_hand">
+    <line class="hand" x1="0" y1="0" x2="0" y2="-50" />
+    <line class="hand hand--thick" x1="0" y1="-12" x2="0" y2="-50" />
+  </g>
+
+  <g id="minute_hand">
+    <line class="hand" x1="0" y1="0" x2="0" y2="-80" />
+    <line class="hand hand--thick" x1="0" y1="-12" x2="0" y2="-80" />
+  </g>
+
+  <g id="second_hand">
+    <line class="hand hand--second" x1="0" y1="12" x2="0" y2="-80" />
+  </g>
+
+  <circle class="center" r="3">
+
+</svg>
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+  
+      <script id="rendered-js" >
+function getId(id) {
+  return document.getElementById(id);
+}
+
+function setAttr(element, attributes) {
+  for (var key in attributes) {
+    element.setAttribute(key, attributes[key]);
+  }
+}
+
+function respond(event_type, element, ...listener_args) {
+  element.addEventListener(event_type, ...listener_args);
+}
+
+function show(f) {
+  function g() {
+    f();
+    requestAnimationFrame(g);
+  }
+  requestAnimationFrame(g);
+}
+
+const textElement = getId("text");
+const hoursElement = getId("hour_hand");
+const minutesElement = getId("minute_hand");
+const secondsElement = getId("second_hand");
+
+let showDate = true;
+
+function animate() {
+  const date = new Date();
+  const day = date.getDate();
+  const am_pm = date.getHours() >= 12 ? "PM" : "AM";
+  const hour = date.getHours() + date.getMinutes() / 60;
+  const minute = date.getMinutes() + date.getSeconds() / 60;
+  const second = date.getSeconds() + date.getMilliseconds() / 1000;
+
+  textElement.textContent = showDate ? day : am_pm;
+  setAttr(hoursElement, {
+    transform: `rotate(${360 / 12 * hour})` });
+
+  setAttr(minutesElement, {
+    transform: `rotate(${360 / 60 * minute})` });
+
+  setAttr(secondsElement, {
+    transform: `rotate(${360 / 60 * second})` });
+
+}
+
+show(animate);
+
+respond("click", textElement, () => {
+  showDate = !showDate;
+});
+//# sourceURL=pen.js
+    </script>
+
+  
+</body>
+
+</html>
